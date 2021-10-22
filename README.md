@@ -1,4 +1,4 @@
-# Project1
+# Draco Meteor
 **How to play:**
 * You are a player who got sent to space on a mission to collect all the stars to save the planet from destruction. The catch... the player has to dodge meteors while collecting stars. Once you collect 20 stars you win and save the planet. If you hit a meteor the player dies and the planet will be destroyed.
 
