@@ -1,6 +1,6 @@
 # Project1
 **How to play:**
-* You are a player who got sent to space on a mission to collect all the stars to save the planet from destruction. The catch... the player has to dodge meteors while collecting stars. Once you collect a certain amount of stars you win. If you hit a meteor the player dies and the planet will be destroyed.
+* You are a player who got sent to space on a mission to collect all the stars to save the planet from destruction. The catch... the player has to dodge meteors while collecting stars. Once you collect 20 stars you win and save the planet. If you hit a meteor the player dies and the planet will be destroyed.
 
 ![spaceGame](https://user-images.githubusercontent.com/91760331/138509531-a1dbdc29-d0ff-41ad-a11d-8a5802a4b0a8.png)
 
@@ -17,12 +17,13 @@
 * Create a restart button
 * If the player dodges a meteor or a star have it disappear off screen
 * Render multiple stars that go down the screen for the player to collect for points
-* Have a game ending victory screen if the player collects all stars 
+* Have a game ending victory screen if the player collects 20 stars 
 
 **Stretch Goals**
 * Have the player be able to shoot the meteors
 * The stars the player collects makes the meteors slower which makes surviving easier
 * Have it to where meteor pieces randomly break off making it harder to dodge
+* Have different levels of difficulty 
 
 **Potential Roadblocks**
 * Getting in my own head 
