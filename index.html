@@ -11,12 +11,14 @@
 <body>
     <!-- <hr id=lineOne></hr> -->
   <div id="container">
+    <button id="startButton" onClick = "gameStart()">Start!</button>
+    <button id="restartButton" onClick = "gameRestart()">Restart!</button>
     <aside id="top-left"><h2>Dodge the meteors!</h2></aside>
     <aside id="top-right"><h2 id="movement"></h2></aside>
     <main>
         <canvas id="canvas"><!-- play it, a game --></canvas>
     </main>
-    <aside id="btm-left"><h2>Points</h2></aside>
+    <aside id="btm-left"><h2>Points:</h2></aside>
     <aside id="btm-right"><h2 id="status">Collect the stars!</h2></aside>
   </div>
   <script src="script.js"></script>
