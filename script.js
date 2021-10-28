@@ -13,6 +13,9 @@ restartButton.disabled = true
 //drop options for objects
 const dropOptions = [0, 185, 370, 555, 740]
 
+let lastOption;
+
+
 //speed options for objects
 const speedOptions = [7, 9, 10, 13, 17]
 
@@ -48,6 +51,7 @@ function Meteor(x, y, color, width, height) {
     this.color = color
     this.width = width
     this.height = height
+    this.dropRate = speedOptions[Math.floor(Math.random() * speedOptions.length)]
     this.alive = true
     this.render = function () {
         ctx.fillStyle = this.color
@@ -84,16 +88,26 @@ function Star(x, y, color, width, height) {
 }
 
 let player = new Player(370, 540, "#6FC9E7", 60, 60)
-let meteorOne = new Meteor(0, -50, "pink", 60, 40)
-let meteorTwo = new Meteor(185, -60, "pink", 60, 40)
-let meteorThree = new Meteor(370, -60, "pink", 60, 40)
-let meteorFour = new Meteor(555, -50, "pink", 60, 40)
-let meteorFive = new Meteor(740, -60, "pink", 60, 40)
-// console.log("this is the player", player)
+// let meteorOne = new Meteor(0, -50, "pink", 60, 40)
+// let meteorTwo = new Meteor(185, -60, "pink", 60, 40)
+// let meteorThree = new Meteor(370, -60, "pink", 60, 40)
+// let meteorFour = new Meteor(555, -50, "pink", 60, 40)
+// let meteorFive = new Meteor(740, -60, "pink", 60, 40)
+// // console.log("this is the player", player)
 // console.log("this is  the meteor", meteorOne)
 
 //array of meteors
-let meteors = [meteorOne, meteorTwo, meteorThree, meteorFour, meteorFive]
+let meteors = []
+for (let i = 0; i < 7; i++) {
+    let randomIndex = dropOptions[Math.floor(Math.random() * dropOptions.length)]
+    if (randomIndex === lastOption) {
+        randomIndex = dropOptions[Math.floor(Math.random() * dropOptions.length)]
+    }
+    lastOption = randomIndex
+    meteors.push(new Meteor(
+        randomIndex, -60, "pink", 60, 40
+    ));
+}
 
 //array of stars and number game can render at once
 let stars = [];
@@ -104,6 +118,9 @@ for (let i = 0; i < 10; i++) {
     ));
 }
 
+const labelPointsText = () => `Points: ${score}/${pointsToWin}`
+    
+
 //Connecting stars to points innerText(bottom left)
 function incrementPoints(currentStar) {
 
@@ -113,7 +130,7 @@ function incrementPoints(currentStar) {
         interactions.push(currentStar);
         //score goes up by 1 every time star is collected
         score++ 
-        pointsView.innerText = `Points: ${score}` 
+        pointsView.innerText = labelPointsText() 
         if (score === pointsToWin) {
             //game ending condition
             gameEndingMessage.innerText = "YOU WIN!!!"
@@ -148,11 +165,7 @@ let movementHandler = (e) => {
 
 //how many spaces on the y axis the meteors can go
 let meteorMovement = () => {
-    meteorOne.y += 9;
-    meteorTwo.y += 13;
-    meteorThree.y += 15;
-    meteorFour.y += 8;
-    meteorFive.y += 12;
+    meteors.forEach(m => m.y += m.dropRate)
 }
 
 //how many spaces on the y axis stars can go
@@ -162,20 +175,10 @@ let starMovement = () => {
 
 //Code for meteors to loop after going off screen
 let meteorLoop = () => {
-    if (meteorOne.y >= 600) {
-        return meteorOne.y = -45;
-    }
-    if (meteorTwo.y >= 600) {
-        return meteorTwo.y = -60;
-    }
-    if (meteorThree.y >= 600) {
-        return meteorThree.y = -45;
-    }
-    if (meteorFour.y >= 600) {
-        return meteorFour.y = -60;
-    }
-    if (meteorFive.y >= 600) {
-        return meteorFive.y = -60;
+    for (let i = 0; i < meteors.length; i++) {
+        if (meteors[i].y >= 600) {
+            meteors[i] = new Meteor(dropOptions[Math.floor(Math.random() * dropOptions.length)], -60, 'pink', 60, 40)
+        }
     }
 }
 
@@ -241,11 +244,7 @@ const gameLoop = () => {
         detectMeteorHit()
         detectStarHit()
         player.render()
-        meteorOne.render()
-        meteorTwo.render()
-        meteorThree.render()
-        meteorFour.render()
-        meteorFive.render()
+        meteors.forEach(m => m.render())
         //only render stars that have NOT been collected
         stars.filter(s => !s.collected).forEach(s => s.render())
 
@@ -305,16 +304,20 @@ const initializeGame = () => {
         ));
 
     }
+
+    meteors = [];
+    for (let i = 0; i < 7; i++) {
+        meteors.push(new Meteor(
+            dropOptions[Math.floor(Math.random() * dropOptions.length)],
+            -60, "pink", 60, 40
+        ));
+
+    }
+
     interactions = [];
     player = new Player(370, 540, "#6FC9E7", 60, 60)
-    meteorOne = new Meteor(0, -50, "pink", 60, 40)
-    meteorTwo = new Meteor(185, -60, "pink", 60, 40)
-    meteorThree = new Meteor(370, -60, "pink", 60, 40)
-    meteorFour = new Meteor(555, -50, "pink", 60, 40)
-    meteorFive = new Meteor(740, -60, "pink", 60, 40)
-    meteors = [meteorOne, meteorTwo, meteorThree, meteorFour, meteorFive]
     score = 0;
     moveDisplay.innerText = ""
     gameEndingMessage.innerText = "Collect 50 stars to win!"
-    pointsView.innerText = "Points: 0"
+    pointsView.innerText = labelPointsText()
 }
