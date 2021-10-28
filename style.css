@@ -1,19 +1,21 @@
 html,body {
     margin: 0;
     padding: 0;
+    
   }
   
   body {
     padding-top: 1em;
     text-align: center;
     background-color: black;
-    /* background-image: url('../img/dungeonhell.png'); */
-    background-size: cover;
+    background-image: url("./Assets/background.gif");
+    background-size: cover; */
     background-repeat: space;
   }
   
   h1, h2 {
     font-family: 'Press Start 2P', monospace;
+    /* background-image: url("./Assets/background.gif"); */
     /* font-family: monospace; */
     color: rgb(32, 190, 218);
   }
@@ -85,3 +87,21 @@ html,body {
     display: none;
   }
 
+  #startButton {
+    /* background-image: url("./Assets/background.gif"); */
+    background-color: rgb(0, 112, 163);
+    color: white;
+    font-size: larger;
+  }
+
+  #restartButton {
+    /* background-image: url("./Assets/background.gif"); */
+    background-color: rgb(0, 112, 163);
+    color: white;
+    font-size: larger;
+  }
+
+  :disabled {
+    background-color: rgba(152, 6, 250, 0.87) !important;
+    color: rgba(152, 6, 250, 0.87) !important;
+  }
