@@ -19,7 +19,7 @@ html,body {
   }
   
   canvas {
-    /* background-image: url("https://user-images.githubusercontent.com/91760331/138509531-a1dbdc29-d0ff-41ad-a11d-8a5802a4b0a8.png"); */
+    background-image: url("./Assets/background.gif");
     /* background-repeat: repeat; */
     background-color: rgb(9, 0, 87);
     width: 100%;
@@ -73,4 +73,15 @@ html,body {
     /* background-color: #222; */
   }
 
+  #starImage {
+    display: none;
+  }
+
+  #meteorImage {
+    display: none;
+  }
+
+  #playerImage {
+    display: none;
+  }
 

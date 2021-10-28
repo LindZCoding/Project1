@@ -5,6 +5,12 @@ const game = document.getElementById("canvas");
 //movement tracker
 const moveDisplay = document.getElementById("movement")
 
+let starImage = document.getElementById("starImage")
+
+let meteorImage = document.getElementById("meteorImage")
+
+let playerImage = document.getElementById("playerImage")
+
 const startButton = document.getElementById("startButton")
 
 const restartButton = document.getElementById("restartButton")
@@ -14,7 +20,6 @@ restartButton.disabled = true
 const dropOptions = [0, 185, 370, 555, 740]
 
 let lastOption;
-
 
 //speed options for objects
 const speedOptions = [7, 9, 10, 13, 17]
@@ -55,7 +60,7 @@ function Meteor(x, y, color, width, height) {
     this.alive = true
     this.render = function () {
         ctx.fillStyle = this.color
-        ctx.fillRect(this.x, this.y, this.width, this.height)
+        ctx.drawImage(meteorImage, this.x, this.y, this.width, this.height)
     }
 }
 
@@ -68,7 +73,7 @@ function Player(x, y, color, width, height) {
     this.alive = true
     this.render = function () {
         ctx.fillStyle = this.color
-        ctx.fillRect(this.x, this.y, this.width, this.height)
+        ctx.drawImage(playerImage, this.x, this.y, this.width, this.height)
     }
 }
 
@@ -83,7 +88,7 @@ function Star(x, y, color, width, height) {
     this.alive = true
     this.render = function () {
         ctx.fillStyle = this.color
-        ctx.fillRect(this.x, this.y, this.width, this.height)
+        ctx.drawImage(starImage, this.x, this.y, this.width, this.height)
     }
 }
 
@@ -105,7 +110,7 @@ for (let i = 0; i < 7; i++) {
     }
     lastOption = randomIndex
     meteors.push(new Meteor(
-        randomIndex, -60, "pink", 60, 40
+        randomIndex, -60, "pink", 60, 60
     ));
 }
 
@@ -114,7 +119,7 @@ let stars = [];
 for (let i = 0; i < 10; i++) {
     stars.push(new Star(
         dropOptions[Math.floor(Math.random() * dropOptions.length)],
-        -60, "yellow", 20, 30
+        -60, "yellow", 40, 40
     ));
 }
 
@@ -177,7 +182,7 @@ let starMovement = () => {
 let meteorLoop = () => {
     for (let i = 0; i < meteors.length; i++) {
         if (meteors[i].y >= 600) {
-            meteors[i] = new Meteor(dropOptions[Math.floor(Math.random() * dropOptions.length)], -60, 'pink', 60, 40)
+            meteors[i] = new Meteor(dropOptions[Math.floor(Math.random() * dropOptions.length)], -60, 'pink', 60, 60)
         }
     }
 }
@@ -186,7 +191,7 @@ let meteorLoop = () => {
 const starLoop = () => {
     for (let i = 0; i < stars.length; i++) {
         if (stars[i].y >= 600 || stars[i].collected === true) {
-            stars[i] = new Star(dropOptions[Math.floor(Math.random() * dropOptions.length)], -60, 'yellow', 20, 30)
+            stars[i] = new Star(dropOptions[Math.floor(Math.random() * dropOptions.length)], -60, 'yellow', 40, 40)
         }
     }
 }
@@ -300,7 +305,7 @@ const initializeGame = () => {
     for (let i = 0; i < 10; i++) {
         stars.push(new Star(
             dropOptions[Math.floor(Math.random() * dropOptions.length)],
-            -60, "yellow", 20, 30
+            -60, "yellow", 40, 40
         ));
 
     }
@@ -309,7 +314,7 @@ const initializeGame = () => {
     for (let i = 0; i < 7; i++) {
         meteors.push(new Meteor(
             dropOptions[Math.floor(Math.random() * dropOptions.length)],
-            -60, "pink", 60, 40
+            -60, "pink", 60, 60
         ));
 
     }
