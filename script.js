@@ -19,7 +19,7 @@ const speedOptions = [7, 9, 10, 13, 17]
 //interval variable so the game can clear it on restart
 let intervalHandle;
 
-const pointsToWin = 10;
+const pointsToWin = 50;
 
 //Points on bottom left
 const pointsView = document.querySelector("#btm-left > h2")
