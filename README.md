@@ -10,14 +10,14 @@
 * JavaScript, HTML, and CSS
 
 **MVP**
-* Create a start game screen with instructions
+* Create a start game button 
 * Create a top down view of game that also displays players points
-* Render a space character that moves with WASD keys in between the lines
+* Render a space character that moves with "AD" keys that go left & right in between the lines
 * Render multiple meteors that go down the screen between the lines, if any meteor hits the player the game is over
 * Create a restart button
 * If the player dodges a meteor or a star have it disappear off screen
 * Render multiple stars that go down the screen for the player to collect for points
-* Have a game ending victory screen if the player collects 20 stars 
+* Have a game ending victory screen if the player collects 50 stars 
 
 **Stretch Goals**
 * Have the player be able to shoot the meteors

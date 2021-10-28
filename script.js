@@ -1,37 +1,46 @@
 // console.log("IT WORKS WOOO")
 //Our canvas variable
 const game = document.getElementById("canvas");
+
 //movement tracker
 const moveDisplay = document.getElementById("movement")
+
+const startButton = document.getElementById("startButton")
+
+const restartButton = document.getElementById("restartButton")
+restartButton.disabled = true
 
 //drop options for objects
 const dropOptions = [0, 185, 370, 555, 740]
 
+//speed options for objects
 const speedOptions = [7, 9, 10, 13, 17]
 
+//interval variable so the game can clear it on restart
 let intervalHandle;
 
+const pointsToWin = 10;
+
+//Points on bottom left
 const pointsView = document.querySelector("#btm-left > h2")
 
-const losingMessage = document.querySelector("#btm-right > h2")
+//bottom right message 
+const gameEndingMessage = document.querySelector("#btm-right > h2")
 
-
-let interactions = []; //array of stars that the player has touched
+//array of stars that the player has touched
+let interactions = [];
 
 //canvas sizing
 canvas.width = 400;
 canvas.height = 600;
 
-//scorekeeper
-
-
 //set up height & width variables
 game.setAttribute("width", getComputedStyle(game)["width"])
 game.setAttribute("height", getComputedStyle(game)["height"])
 
-//now we need to get the games context so we can add to it, draw on it, create animations etc
-//we do this with the built in canvas method, getContext
+//get the games context so we can add to it, draw on it, create animations etc
 const ctx = game.getContext("2d")
+
 
 function Meteor(x, y, color, width, height) {
     this.x = x
@@ -66,6 +75,7 @@ function Star(x, y, color, width, height) {
     this.width = width
     this.height = height
     this.dropRate = speedOptions[Math.floor(Math.random() * speedOptions.length)]
+    this.collected = false
     this.alive = true
     this.render = function () {
         ctx.fillStyle = this.color
@@ -79,13 +89,13 @@ let meteorTwo = new Meteor(185, -60, "pink", 60, 40)
 let meteorThree = new Meteor(370, -60, "pink", 60, 40)
 let meteorFour = new Meteor(555, -50, "pink", 60, 40)
 let meteorFive = new Meteor(740, -60, "pink", 60, 40)
-console.log("this is the player", player)
-console.log("this is  the meteor", meteorOne)
+// console.log("this is the player", player)
+// console.log("this is  the meteor", meteorOne)
 
 //array of meteors
 let meteors = [meteorOne, meteorTwo, meteorThree, meteorFour, meteorFive]
 
-//array of stars
+//array of stars and number game can render at once
 let stars = [];
 for (let i = 0; i < 10; i++) {
     stars.push(new Star(
@@ -94,20 +104,26 @@ for (let i = 0; i < 10; i++) {
     ));
 }
 
+//Connecting stars to points innerText(bottom left)
 function incrementPoints(currentStar) {
 
     if (interactions.includes(currentStar)) {
         return;
     } else {
         interactions.push(currentStar);
-        pointsView.innerText = `Points: ${score += 1}`
-        //whatever you want to happen when a player touches a star
+        //score goes up by 1 every time star is collected
+        score++ 
+        pointsView.innerText = `Points: ${score}` 
+        if (score === pointsToWin) {
+            //game ending condition
+            gameEndingMessage.innerText = "YOU WIN!!!"
+            player.alive = false
+        } 
     }
 
 }
 
-//if we want to restrict our player from leaving the canvas, we can include that in our movehandler
-
+//restricting where player can move
 let movementHandler = (e) => {
     switch (e.key.toLowerCase()) {
         case "a":
@@ -166,7 +182,7 @@ let meteorLoop = () => {
 //code for stars to loop after going off screen
 const starLoop = () => {
     for (let i = 0; i < stars.length; i++) {
-        if (stars[i].y >= 600) {
+        if (stars[i].y >= 600 || stars[i].collected === true) {
             stars[i] = new Star(dropOptions[Math.floor(Math.random() * dropOptions.length)], -60, 'yellow', 20, 30)
         }
     }
@@ -174,7 +190,7 @@ const starLoop = () => {
 
 
 // make collision detection
-//writing some logic that determines if any part of our player square touches any part of our meteor
+//if any part of player square touches any part of meteor
 const detectMeteorHit = () => {
     //if the player's x + width or y + height hits the meteors x+width or y+height, kill player
     for (i = 0; i < meteors.length; i++)
@@ -187,10 +203,11 @@ const detectMeteorHit = () => {
             //kill player
             player.alive = false
             //end the game
-            losingMessage.innerText = "You lose!"
+            gameEndingMessage.innerText = "Game over!"
         }
 }
 
+//score starts at 0
 let score = 0;
 
 //detection if player touches any part of the stars
@@ -202,10 +219,12 @@ const detectStarHit = () => {
             player.y < stars[i].y + stars[i].height &&
             player.y + player.height > stars[i].y
         ) {
-            player.alive = true
+            stars[i].alive = false
+            stars[i].collected = true
             incrementPoints(stars[i])
         }
 }
+
 
 // we are going to set up our game loop to be used in our timing function
 //set up gameLoop func, declaring what happens when our game is running
@@ -218,16 +237,18 @@ const gameLoop = () => {
     moveDisplay.innerText = `X: ${player.x}\nY: ${player.y}`
     //check if the player is alive, if so render the meteors and stars
     if (player.alive) {
+
+        detectMeteorHit()
+        detectStarHit()
+        player.render()
         meteorOne.render()
         meteorTwo.render()
         meteorThree.render()
         meteorFour.render()
         meteorFive.render()
-        stars.forEach(s => s.render())
+        //only render stars that have NOT been collected
+        stars.filter(s => !s.collected).forEach(s => s.render())
 
-        //add in our detection to see if the hit has been made 
-        detectMeteorHit()
-        detectStarHit()
     }
 
 
@@ -235,8 +256,12 @@ const gameLoop = () => {
     meteorLoop();
 
     //render our player if the player is alive
-    if (player.alive) {
-        player.render();
+    // if (player.alive) {
+    //     player.render();
+    // }
+
+    if (player.alive === false) {
+        moveDisplay.innerText = ""
     }
 
     //down movement function on the y axis of the meteors
@@ -248,23 +273,21 @@ const gameLoop = () => {
     //function that loops the stars after they go off screen
     starLoop();
 
-    // setInterval(meteorMovement, 1000);
-
 }
-
-// duplicate();
-//func that will stop our animation loop
-// let stopGameLoop = () => { clearInterval(gameInterval) }
 
 //event listener for player movement
 document.addEventListener("keydown", movementHandler)
+
 //timing func will determine how and when game animates
-// let gameInterval = setInterval(gameLoop, 50)
 const gameStart = () => {
+    startButton.disabled = true
+    restartButton.disabled = false
     initializeGame()
+    clearInterval(intervalHandle)
     intervalHandle = setInterval(gameLoop, 50)
 }
 
+//Restart game button function
 const gameRestart = () => {
     initializeGame()
     clearInterval(intervalHandle)
@@ -272,6 +295,7 @@ const gameRestart = () => {
 
 }
 
+// initial game setup when start or restart is clicked
 const initializeGame = () => {
     stars = [];
     for (let i = 0; i < 10; i++) {
@@ -279,6 +303,7 @@ const initializeGame = () => {
             dropOptions[Math.floor(Math.random() * dropOptions.length)],
             -60, "yellow", 20, 30
         ));
+
     }
     interactions = [];
     player = new Player(370, 540, "#6FC9E7", 60, 60)
@@ -289,6 +314,7 @@ const initializeGame = () => {
     meteorFive = new Meteor(740, -60, "pink", 60, 40)
     meteors = [meteorOne, meteorTwo, meteorThree, meteorFour, meteorFive]
     score = 0;
-    losingMessage.innerText = "Collect the stars!"
-    pointsView.innerText = "Points"
+    moveDisplay.innerText = ""
+    gameEndingMessage.innerText = "Collect 50 stars to win!"
+    pointsView.innerText = "Points: 0"
 }
