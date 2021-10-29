@@ -16,8 +16,8 @@ const startButton = document.getElementById("startButton")
 const restartButton = document.getElementById("restartButton")
 restartButton.disabled = true
 
-const music = document.getElementById("musicplayer")
-music.volume = 0.01;
+// const music = document.getElementById("musicplayer")
+// music.volume = 0.1;
 
 
 //drop options for objects
@@ -293,6 +293,9 @@ document.addEventListener("keydown", movementHandler)
 const gameStart = () => {
     startButton.disabled = true
     restartButton.disabled = false
+    let music = new Audio("./Assets/InnerAnimal.mp3")
+    music.play()
+    music.volume = 0.01;
     initializeGame()
     clearInterval(intervalHandle)
     intervalHandle = setInterval(gameLoop, 50)
