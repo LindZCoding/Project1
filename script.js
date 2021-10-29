@@ -79,7 +79,7 @@ function Player(x, y, color, width, height) {
     this.alive = true
     this.render = function () {
         ctx.fillStyle = this.color
-        ctx.drawImage(playerImage, this.x, this.y, this.width, this.height)
+        ctx.drawImage(playerImage, this.x, this.y - 18, this.width, this.height)
     }
 }
 
